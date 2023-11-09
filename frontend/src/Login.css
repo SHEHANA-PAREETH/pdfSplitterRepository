@@ -1,0 +1,24 @@
+.logincontainer{
+
+    position: relative;
+    height:80vh;
+  }
+  
+  .logincontainer::after {
+    content: "";
+    background-image: url('./images/loginimage.jpg');
+ opacity: 0.6;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1; 
+    background-size: cover;
+    background-position:bottom;
+    background-repeat: no-repeat; 
+    margin-left: 0; 
+  }
+  
+ 
+ 
