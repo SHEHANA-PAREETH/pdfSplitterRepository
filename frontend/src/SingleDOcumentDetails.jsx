@@ -38,12 +38,12 @@ setLoader(true)
   
     console.log(resp);
     setnewpdfname(resp.data.name)
-    if(resp.data.msg==='success'){
+    if(resp?.data?.msg==='success'){
      setError(false)
      setsubmitok(true)
  
     }
-    if(resp.data.msg==="enter valid page numbers"){
+    if(resp?.data?.msg==="enter valid page numbers"){
       setError(true)
       setsubmitok(false)
       setTimeout(() => {
@@ -54,7 +54,7 @@ setLoader(true)
 
 }).catch((error)=>{
   console.log(error);
-  if(error.response.data.message==="unauthorized request"){
+  if(error?.response?.data?.message==="unauthorized request"){
    Swal.fire({  
           
      text: 'something went wrong.',

@@ -122,18 +122,18 @@ deleteAllFilesInDir('./public/merges').then(() => {
 
 
 const PDFMerger = require('pdf-merger-js');
+const { log } = require('console');
 
 
 const mergePdfs =  (req,res)=>{
    
       try {
+        
         var merger = new PDFMerger();
           console.log(req.query.id);
           console.log(req.query.desiredpages);
-         if(req.query.desiredpages.includes('0')||req.query.desiredpages.includes.length==='0'){
-          res.json({msg:"enter valid page numbers"})
-        }
-         else{
+        if(req.query.desiredpages){
+
           UPLOADTODB.findOne({_id:req.query.id}).then((resp)=>{
             const intpagevalues=[]
             
@@ -154,6 +154,7 @@ const mergePdfs =  (req,res)=>{
          console.log(rangeswithcomma);
          
          rangeswithcomma.forEach((value)=>{
+         
           intpagevalues.push(parseInt(value))
           })
           const rangesnew=[]
@@ -169,40 +170,58 @@ const mergePdfs =  (req,res)=>{
           }
          })
           //console.log(newpages);
+        const newnanarray=[]
          console.log(intpagevalues);
-      
-        const result= intpagevalues.every((value)=>{
-         return  value<=resp.newpdfs
+  for(let i=0;i<intpagevalues.length;i++){
+if(Boolean(intpagevalues[i])===true){
+  newnanarray.push(intpagevalues[i])
+}
+  }
+  console.log(newnanarray);
+  const zeroremove=[]
+  for(let i=0;i<newnanarray.length;i++){
+    if(newnanarray[i]>0){
+      zeroremove.push(newnanarray[i])
+    }
+      }
+console.log(zeroremove);
+        const result = zeroremove.every((value)=>{
+            return  (value<=resp.newpdfs)
           })
-          console.log(result);
+
+
+        console.log(result);
         
       //console.log(intpagevalues.length,'length');
       
          if(result){
 
-          (async ( )=>{
-                for(i=0;i<intpagevalues.length;i++){
-                 await   merger.add(`public/uploads/${resp.pdf.filename}`,intpagevalues[i]);    
-                }
-               
-                    let d= new Date().getTime()
-                await merger.save(`public/merges/${d}-${resp.pdf.originalname}`);
+          (async ()=>{
+          
+            if(zeroremove.length){
+           
+              for(i=0;i<zeroremove.length;i++){
+
+                  
+                await   merger.add(`public/uploads/${resp.pdf.filename}`,zeroremove[i]);    
+               }
+              
+                   let d= new Date().getTime()
+               await merger.save(`public/merges/${d}-${resp.pdf.originalname}`);
 //save under given name and reset the internal document
-            
-              const pdfmergedname=`${d}-${resp.pdf.originalname}`
-            const docmentAsBytes = await fs.promises.readFile(`public/merges/${d}-${resp.pdf.originalname}`);
-      
-          // Load your PDFDocument
-          const pdfDoc = await PDFDocument.load(docmentAsBytes)
-      
-          var numberOfPages = pdfDoc.getPages().length;
-      console.log(intpagevalues.length);
+           
+             const pdfmergedname=`${d}-${resp.pdf.originalname}`
+           const docmentAsBytes = await fs.promises.readFile(`public/merges/${d}-${resp.pdf.originalname}`);
      
-     console.log(numberOfPages);
-    
-              console.log(pdfmergedname,'name');
-             
-              res.json({msg:'success',name:pdfmergedname})
+       
+   
+             console.log(pdfmergedname,'name');
+            
+             res.json({msg:'success',name:pdfmergedname})
+            }
+            else{
+              res.json({msg:"enter valid page numbers"})
+            }
        
              })()
             
@@ -213,10 +232,10 @@ const mergePdfs =  (req,res)=>{
            
           
         }  ) 
-
-         }
-          
-          }
+        } 
+      else{
+        res.json({msg:"enter valid page numbers"})
+      } }
      
         catch (error) {
           console.log(error);

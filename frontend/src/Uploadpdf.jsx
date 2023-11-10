@@ -43,7 +43,7 @@ function Uploadpdf() {
       );
       console.log(result);
      
-     if (result.data.status === "ok") {
+     if (result.data?.status === "ok") {
       Swal.fire({  
         title: 'Good job!',  
         text: 'You uploaded the document successfully.',
@@ -51,6 +51,7 @@ function Uploadpdf() {
       }).then(()=>{
         Navigate('/home')
       })
+      
     };
     
     }
