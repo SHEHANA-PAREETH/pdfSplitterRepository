@@ -1,28 +1,21 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { redirect, useNavigate } from 'react-router-dom';
+
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import {Form,Container} from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import './Uploadpdf.css'
 import Swal from 'sweetalert2'
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+
 import AxiosInstance from './config/axiosinstsance';
 import Navcomponent from './components/Navcomponent';
 function Uploadpdf() {
-  const dispatch=useDispatch( )
-  const{user}=useSelector((state)=>state.user)
+ 
   const Navigate=useNavigate()
   const [title,setTitle]=useState('')
   const [file,setFile]=useState('')
  
   const navigate = useNavigate();
-  useEffect(() => {
-      let isAuth = JSON.parse(localStorage.getItem('user'));
-      if(isAuth && isAuth !== null) {
-          navigate("/home");
-      }
-  }, []);
+  
 
   const submitImage=async (e)=>{
     e.preventDefault();

@@ -1,8 +1,8 @@
 import React,{useEffect, useState} from 'react'
-import { useNavigate, useParams,redirect } from 'react-router-dom'
+import { useNavigate, useParams} from 'react-router-dom'
 import { BASE_URL } from './constants'
-
-import {Button,Form} from 'react-bootstrap'
+import Swal from 'sweetalert2'
+import {Button,Form,Spinner} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup';
 import  FileDownload from 'js-file-download'
 
@@ -13,7 +13,7 @@ function SingleDOcumentDetails() {
     const [numberofpages,setnumber]=useState(1)
    const {id}=useParams()
   const [title,setTitle]=useState()
-  
+  const navigate=useNavigate()
 useEffect(()=>{
     AxiosInstance.get(`/getsinglepdf`,{params:{id:id}}).then((resp)=>{
 console.log(resp.data.data);
@@ -22,9 +22,9 @@ setTitle(resp.data.data.title)
 setnumber(resp.data.data.newpdfs)
 console.log(pdfURL);
     })
-},[])
+},[pdfURL])
 const [desiredpages,setdesiredpages]=useState()
-const Navigate=useNavigate()
+const[loader,setLoader]=useState(false)
 const [newpdfname,setnewpdfname]=useState()
 const [errorvalue,setError]=useState(false)
 const [popup,setpopup]=useState(false)
@@ -32,7 +32,7 @@ const [popup,setpopup]=useState(false)
 const [submutok,setsubmitok]=useState(false)
 const handleSubmit=(e)=>{
   e.preventDefault()
-
+setLoader(true)
   AxiosInstance.get(`/mergepdfs`,{params:{id:id,desiredpages:desiredpages}}).then((resp)=>{
   
   
@@ -46,6 +46,9 @@ const handleSubmit=(e)=>{
     if(resp.data.msg==="enter valid page numbers"){
       setError(true)
       setsubmitok(false)
+      setTimeout(() => {
+        setError(false)
+      },1000);
     }
    
 
@@ -62,7 +65,7 @@ const handleSubmit=(e)=>{
    })
   }
  })
-
+setLoader(false)
 }
 
 const handleContinue=()=>{
@@ -168,8 +171,8 @@ const getsplittedpdf=()=>{
       </Form.Group>
       {errorvalue?<p className='text-danger'>enter valid page numbers</p>:''}
     
-      <Button class='btn'  className='my-2' style={{backgroundColor:'#D20000'}}   type="submit">Create Pdf</Button> 
-     {submutok?<Button class="btn btn-warning h-25 mb-5" data-bs-dismiss="modal" style={{backgroundColor:'#D20000'}} onClick={handleContinue}>continue....</Button>:""} 
+      <Button class='btn'  className='my-2' style={{backgroundColor:'#D20000'}}   type="submit">Create Pdf</Button> <br/>
+     {submutok?<Button class="btn btn-warning h-25 mb-5" data-bs-dismiss="modal" style={{backgroundColor:'#D20000'}} onClick={handleContinue}>continue....</Button>: <Spinner animation="border" variant="danger" size="sm"/>} 
       </Form>
 
          

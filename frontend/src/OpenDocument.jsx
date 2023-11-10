@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { BASE_URL } from './constants'
-import axios from 'axios'
+
+import Swal from 'sweetalert2';
 import SingleDocument from './SingleDocument'
 import Table from 'react-bootstrap/Table';
 import { Container } from 'react-bootstrap';
 import AxiosInstance from './config/axiosinstsance';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Navcomponent from './components/Navcomponent';
 function OpenDocument() {
   const navigate=useNavigate()
@@ -30,8 +30,6 @@ function OpenDocument() {
              })
             }
            }) 
-     
-
     },[allPdfFiles])
   return (
     <>

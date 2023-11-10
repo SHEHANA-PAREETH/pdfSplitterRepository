@@ -130,87 +130,92 @@ const mergePdfs =  (req,res)=>{
         var merger = new PDFMerger();
           console.log(req.query.id);
           console.log(req.query.desiredpages);
-         
+         if(req.query.desiredpages.includes('0')||req.query.desiredpages.includes.length==='0'){
+          res.json({msg:"enter valid page numbers"})
+        }
+         else{
           UPLOADTODB.findOne({_id:req.query.id}).then((resp)=>{
-                  const intpagevalues=[]
-                  
-                 
-               console.log(resp);
-               console.log(resp.newpdfs);
-               let newpages=req.query.desiredpages.split(',')
-              const ranges= newpages.filter((value)=>{
-                return value.includes('-')
-                
-               })
-               const rangeswithcomma=[]
-              newpages.forEach((value)=>{
-              if(!value.includes('-'))
-                rangeswithcomma.push(value)
-               })
-               console.log(ranges);
-               console.log(rangeswithcomma);
-               
-               rangeswithcomma.forEach((value)=>{
-                intpagevalues.push(parseInt(value))
-                })
-                const rangesnew=[]
-                ranges.forEach((value)=>{
-                    rangesnew.push(value.split('-'));
+            const intpagevalues=[]
             
-                    })
-                   console.log(rangesnew);
-                   
-               rangesnew.forEach((value)=>{
-                for(i=parseInt(value[0]);i<=parseInt(value[1]);i++){
-                   intpagevalues.push(parseInt(i))
-                }
-               })
-                //console.log(newpages);
-               console.log(intpagevalues);
-            
-              const result= intpagevalues.every((value)=>{
-               return  value<=resp.newpdfs
-                })
-                console.log(result);
-              
-            //console.log(intpagevalues.length,'length');
-            
-               if(result){
-  
-                (async ( )=>{
-                      for(i=0;i<intpagevalues.length;i++){
-                       await   merger.add(`public/uploads/${resp.pdf.filename}`,intpagevalues[i]);    
-                      }
-                     
-                          let d= new Date().getTime()
-                      await merger.save(`public/merges/${d}-${resp.pdf.originalname}`);
-    //save under given name and reset the internal document
-                  
-                    const pdfmergedname=`${d}-${resp.pdf.originalname}`
-                  const docmentAsBytes = await fs.promises.readFile(`public/merges/${d}-${resp.pdf.originalname}`);
-            
-                // Load your PDFDocument
-                const pdfDoc = await PDFDocument.load(docmentAsBytes)
-            
-                var numberOfPages = pdfDoc.getPages().length;
-            console.log(intpagevalues.length);
            
-           console.log(numberOfPages);
+         console.log(resp);
+         console.log(resp.newpdfs);
+         let newpages=req.query.desiredpages.split(',')
+        const ranges= newpages.filter((value)=>{
+          return value.includes('-')
           
-                    console.log(pdfmergedname,'name');
-                   
-                    res.json({msg:'success',name:pdfmergedname})
+         })
+         const rangeswithcomma=[]
+        newpages.forEach((value)=>{
+        if(!value.includes('-'))
+          rangeswithcomma.push(value)
+         })
+         console.log(ranges);
+         console.log(rangeswithcomma);
+         
+         rangeswithcomma.forEach((value)=>{
+          intpagevalues.push(parseInt(value))
+          })
+          const rangesnew=[]
+          ranges.forEach((value)=>{
+              rangesnew.push(value.split('-'));
+      
+              })
+             console.log(rangesnew);
              
-                   })()
-                  
-                  }
-                   else{
-                      res.json({msg:"enter valid page numbers"})
-                  }
-                 
-                
-              }  ) 
-  
+         rangesnew.forEach((value)=>{
+          for(i=parseInt(value[0]);i<=parseInt(value[1]);i++){
+             intpagevalues.push(parseInt(i))
+          }
+         })
+          //console.log(newpages);
+         console.log(intpagevalues);
+      
+        const result= intpagevalues.every((value)=>{
+         return  value<=resp.newpdfs
+          })
+          console.log(result);
+        
+      //console.log(intpagevalues.length,'length');
+      
+         if(result){
+
+          (async ( )=>{
+                for(i=0;i<intpagevalues.length;i++){
+                 await   merger.add(`public/uploads/${resp.pdf.filename}`,intpagevalues[i]);    
+                }
+               
+                    let d= new Date().getTime()
+                await merger.save(`public/merges/${d}-${resp.pdf.originalname}`);
+//save under given name and reset the internal document
+            
+              const pdfmergedname=`${d}-${resp.pdf.originalname}`
+            const docmentAsBytes = await fs.promises.readFile(`public/merges/${d}-${resp.pdf.originalname}`);
+      
+          // Load your PDFDocument
+          const pdfDoc = await PDFDocument.load(docmentAsBytes)
+      
+          var numberOfPages = pdfDoc.getPages().length;
+      console.log(intpagevalues.length);
+     
+     console.log(numberOfPages);
+    
+              console.log(pdfmergedname,'name');
+             
+              res.json({msg:'success',name:pdfmergedname})
+       
+             })()
+            
+            }
+             else{
+                res.json({msg:"enter valid page numbers"})
+            }
+           
+          
+        }  ) 
+
+         }
+          
           }
      
         catch (error) {

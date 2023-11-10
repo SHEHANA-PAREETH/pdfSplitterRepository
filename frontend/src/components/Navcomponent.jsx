@@ -4,10 +4,6 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import {Button} from 'react-bootstrap'
 
-
-import { useSelector } from 'react-redux';
-import AxiosInstance from '../config/axiosinstsance';
-
 import Swal from 'sweetalert2'
 import {  useNavigate } from 'react-router-dom';
 

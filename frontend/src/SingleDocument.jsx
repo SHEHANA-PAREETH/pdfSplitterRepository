@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import Navcomponent from './components/Navcomponent';
+
 
 function SingleDocument({documentdetails,index}) {
 const Navigate=useNavigate()

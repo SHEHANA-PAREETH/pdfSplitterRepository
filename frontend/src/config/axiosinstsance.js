@@ -1,7 +1,6 @@
 import axios from 'axios'
 import {BASE_URL} from '../constants'
-import Swal from 'sweetalert2'
-import { redirect } from 'react-router-dom'
+
 const AxiosInstance=axios.create({
     baseURL:BASE_URL
 })
