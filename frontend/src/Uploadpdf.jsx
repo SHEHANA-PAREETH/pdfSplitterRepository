@@ -13,48 +13,67 @@ function Uploadpdf() {
   const Navigate=useNavigate()
   const [title,setTitle]=useState('')
   const [file,setFile]=useState('')
- 
+ const [error,setError]=useState(false)
   const navigate = useNavigate();
   
-
+const handleFilechange=(e)=>{
+  setFile(e.target.files[0])
+  const allowedFiles=['application/pdf']
+  
+}
   const submitImage=async (e)=>{
     e.preventDefault();
-    if(title.length === 0&& file.length===0){
+   
+   if(title.length === 0 || file.length===0){
       Swal.fire({  
-         
-        text: ' Please upload the document before submit.',
+          text: ' Please upload the document before submit.',
        
       }).then(()=>{
         Navigate('/home')
       })
+
     }
-    else{
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("file", file);
-      console.log(title, file);
-  
-      const result = await AxiosInstance.post(
-        `/`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
+   
+      else{
+        const allowedFiles=['application/pdf']
+        if(file&& allowedFiles.includes(file.type)){
+          const formData = new FormData();
+          formData.append("title", title);
+          formData.append("file", file);
+          console.log(title, file);
+      
+          const result = await AxiosInstance.post(
+            `/`,
+            formData,
+            {
+              headers: { "Content-Type": "multipart/form-data" },
+            }
+          );
+          console.log(result);
+         
+         if (result.data?.status === "ok") {
+          Swal.fire({  
+            title: 'Good job!',  
+            text: 'You uploaded the document successfully.',
+          
+          }).then(()=>{
+            Navigate('/home')
+          })
+          
+        };
         }
-      );
-      console.log(result);
-     
-     if (result.data?.status === "ok") {
-      Swal.fire({  
-        title: 'Good job!',  
-        text: 'You uploaded the document successfully.',
+        else{
+          setError(true)
+          setTimeout(()=>
+          {
+            setError(false)
+          },1000)
+        }
+        
       
-      }).then(()=>{
-        Navigate('/home')
-      })
-      
-    };
+      }
     
-    }
+   
     
 }
   const getpdf=()=>{
@@ -102,13 +121,13 @@ localStorage.clear()
 <h5 className='mb-3'>Split PDFs in the order you want with the easiest PDF Spitter available.</h5>
      <Form.Group className="mb-3 " >
         <Form.Label className='text-light'>Enter Title</Form.Label>
-        <Form.Control type="text" placeholder="title"  onChange={(e)=>setTitle(e.target.value)}/>
+        <Form.Control type="text" placeholder="title" onChange={(e)=>setTitle(e.target.value)} />
 
       </Form.Group>
       <Form.Group className="mb-3 " >
         <Form.Label className='text-light'>Upload pdf</Form.Label>
-        <Form.Control type="file" placeholder="upload only pdf file" accept="application/pdf" onChange={(e)=>setFile(e.target.files[0])}/>
-
+        <Form.Control type="file" placeholder="upload only pdf file" accept="" onChange={handleFilechange} />
+{error?<h6 className='text-dark mt-2 bg-warning p-2'>Only pdf file can be uploaded</h6>:''}
       </Form.Group>
         
        
