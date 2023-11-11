@@ -51,7 +51,7 @@ const handleFilechange=(e)=>{
           );
           console.log(result);
          
-         if (result.data?.status === "ok") {
+         if (result?.data?.status === "ok") {
           Swal.fire({  
             title: 'Good job!',  
             text: 'You uploaded the document successfully.',
@@ -79,7 +79,7 @@ const handleFilechange=(e)=>{
   const getpdf=()=>{
   AxiosInstance.get(`/getallfiles`).then((resp)=>{
   console.log(resp);
-  if(resp.data.data.length===0){
+  if(resp?.data?.msg==="no documents"){
     Swal.fire({  
          
       text: 'No documents to show.',
@@ -93,7 +93,7 @@ else{
 }
 }).catch((error)=>{
  console.log(error);
- if(error.response.data.message==="unauthorized request"){
+ if(error?.response?.data?.message==="unauthorized request"){
   Swal.fire({  
          
     text: 'something went wrong.',

@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
  const express=require('express')
-
+const users=require('../model/useSchema')
 
  const fileSchema= mongoose.Schema({
     title:
@@ -15,6 +15,10 @@ const mongoose=require('mongoose')
    },
    newpdfs:{
     type:Number
+   },
+   uploadedBy:{
+    type:mongoose.Types.ObjectId,
+    ref: users
    }
 })
 

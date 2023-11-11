@@ -15,6 +15,7 @@ function SingleDOcumentDetails() {
   const [title,setTitle]=useState()
   const navigate=useNavigate()
 useEffect(()=>{
+  
     AxiosInstance.get(`/getsinglepdf`,{params:{id:id}}).then((resp)=>{
 console.log(resp.data.data);
 setPdfURL(resp.data.data.pdf.filename)
@@ -150,9 +151,11 @@ const getsplittedpdf=()=>{
       <div class="modal-content" style={{height:"90vh"}}>
         <div class="modal-header">
           <h5 class="modal-title text-danger" id="exampleModalLabel">PDF</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" className='mt-1'></button>
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal" className='mb-3 me-3' style={{backgroundColor:'#D20000'}}>Close</button>
+
         </div>
         <div class="modal-body">
+          
       <iframe
       src={`${BASE_URL}/uploads/${pdfURL}`}
       frameborder="0"
@@ -160,6 +163,7 @@ const getsplittedpdf=()=>{
       height="100%"
       width="100%"
   ></iframe>
+  
         </div>
         <div class="modal-footer" className='d-flex  justify-content-between'>
       <Form onSubmit={handleSubmit} className='ms-5'>
@@ -175,7 +179,7 @@ const getsplittedpdf=()=>{
      {submutok?<Button class="btn btn-warning h-25 mb-5" data-bs-dismiss="modal" style={{backgroundColor:'#D20000'}} onClick={handleContinue}>continue....</Button>: <Spinner animation="border" variant="danger" size="sm"/>} 
       </Form>
 
-         
+      
         
         </div>
       </div>

@@ -10,6 +10,7 @@ if(typeof bearerHeader!== 'undefined'){
       res.status(403).json({message:'unauthorized request'})
    else{
       //console.log(authData);
+      req.userId=authData.userId
       next()
    }
    })

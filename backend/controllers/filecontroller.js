@@ -21,6 +21,7 @@ upload(req,res,(err)=>{
     UPLOADTODB({
         title:req.body.title,
         pdf:req.file,
+        uploadedBy:req.userId
     }).save().then((resp)=>{
         console.log(resp);
         res.json({status:'ok'})
@@ -39,16 +40,24 @@ upload(req,res,(err)=>{
 const getAllFiles=(req,res)=>{
 
  try{
-  UPLOADTODB.find({}).then((resp)=>
-  res.json({msg:'success',data:resp}))
- }
+  UPLOADTODB.find({uploadedBy:req.userId}).then((resp)=>{
+    //console.log(resp);
+    if(resp.length){
+      res.json({msg:'success',data:resp})
+    }
+    else{
+      res.json({msg:'no documents'})
+    }
+
+  })
+   
+  }
+
+ 
  catch(error){
   console.log(error);
  }
-   
   
- 
-   
 }
 const fs = require('fs');
 const PDFDocument = require('pdf-lib').PDFDocument;
@@ -66,11 +75,14 @@ async function deleteAllFilesInDir(dirPath) {
   try {
     const files = await fsp.readdir(dirPath);
 console.log(files);
-    const deleteFilePromises = files.map(file =>
-      fsp.unlink(path.join(dirPath, file)),
-    );
+if(files){
+  const deleteFilePromises = files.map(file =>
+    fsp.unlink(path.join(dirPath, file)),
+  );
 
-    await Promise.all(deleteFilePromises);
+  await Promise.all(deleteFilePromises);
+}
+    
   } catch (err) {
     console.log(err);
   }
