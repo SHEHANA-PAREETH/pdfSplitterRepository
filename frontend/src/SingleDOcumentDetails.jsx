@@ -16,14 +16,18 @@ function SingleDOcumentDetails() {
   const navigate=useNavigate()
 useEffect(()=>{
   
-    AxiosInstance.get(`/getsinglepdf`,{params:{id:id}}).then((resp)=>{
-console.log(resp.data.data);
-setPdfURL(resp.data.data.pdf.filename)
-setTitle(resp.data.data.title)
-setnumber(resp.data.data.newpdfs)
-console.log(pdfURL);
-    })
-},[pdfURL])
+  getsinglefile()
+},[])
+
+const getsinglefile=()=>{
+  AxiosInstance.get(`/getsinglepdf`,{params:{id:id}}).then((resp)=>{
+    console.log(resp.data.data);
+    setPdfURL(resp.data.data.pdf.filename)
+    setTitle(resp.data.data.title)
+    setnumber(resp.data.data.newpdfs)
+    console.log(pdfURL);
+        })
+}
 const [desiredpages,setdesiredpages]=useState()
 const[loader,setLoader]=useState(false)
 const [newpdfname,setnewpdfname]=useState()
@@ -75,6 +79,7 @@ const handleContinue=()=>{
 }
 const getsplittedpdf=()=>{
   FileDownload(`${BASE_URL}/merges/${newpdfname}`,"splitted.pdf")
+  
   
 }
   return (
@@ -168,7 +173,7 @@ const getsplittedpdf=()=>{
         <div class="modal-footer" className='d-flex  justify-content-between'>
       <Form onSubmit={handleSubmit} className='ms-5'>
         <Form.Group >
-         <Form.Label  class='my-2'>Enter the number of the pages need to download</Form.Label>
+         <Form.Label  class='my-2'>Enter the page numbers needed to split</Form.Label>
     
 
       <Form.Control type="text" placeholder='ex: 3,4,5 OR  7-10  OR   3,4,5,7-10 ' onChange={(e)=>setdesiredpages(e.target.value)}/>

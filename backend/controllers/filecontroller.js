@@ -43,12 +43,10 @@ const getAllFiles=(req,res)=>{
   UPLOADTODB.find({uploadedBy:req.userId}).then((resp)=>{
     //console.log(resp);
     if(resp.length){
-      res.json({msg:'success',data:resp})
+     return res.json({msg:'success',data:resp})
     }
-    else{
+   
       res.json({msg:'no documents'})
-    }
-
   })
    
   }
