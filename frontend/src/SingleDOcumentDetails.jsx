@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import { useNavigate, useParams} from 'react-router-dom'
-import { BASE_URL } from './constants'
+
 import Swal from 'sweetalert2'
 import {Button,Form,Spinner} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -78,7 +78,7 @@ const handleContinue=()=>{
 
 }
 const getsplittedpdf=()=>{
-  FileDownload(`${BASE_URL}/merges/${newpdfname}`,"splitted.pdf")
+  FileDownload(`${process.env.REACT_APP_URL}/merges/${newpdfname}`,"splitted.pdf")
   
   
 }
@@ -108,7 +108,7 @@ const getsplittedpdf=()=>{
         </div>
         <div class="modal-body">
       <iframe
-      src={`${BASE_URL}/merges/${newpdfname}`}
+      src={`${process.env.REACT_APP_URL}/merges/${newpdfname}`}
       frameborder="0"
     
       height="100%"
@@ -162,7 +162,7 @@ const getsplittedpdf=()=>{
         <div class="modal-body">
           
       <iframe
-      src={`${BASE_URL}/uploads/${pdfURL}`}
+      src={`${process.env.REACT_APP_URL}/uploads/${pdfURL}`}
       frameborder="0"
     
       height="100%"

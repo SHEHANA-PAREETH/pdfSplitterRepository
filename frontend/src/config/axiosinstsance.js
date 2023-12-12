@@ -1,8 +1,8 @@
 import axios from 'axios'
-import {BASE_URL} from '../constants'
+
 
 const AxiosInstance=axios.create({
-    baseURL:BASE_URL
+    baseURL:process.env.BASE_URL
 })
 
 AxiosInstance.interceptors.request.use(function(config){
